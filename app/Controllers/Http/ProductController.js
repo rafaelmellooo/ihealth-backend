@@ -2,14 +2,6 @@
 const Product = use('App/Models/Product')
 
 class ProductController {
-  async index({
-    request
-  }) {
-    const products = await Product.query().select(['id', 'name', 'price']).fetch()
-
-    return products
-  }
-
   async store({
     auth,
     request,

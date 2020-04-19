@@ -8,8 +8,8 @@ class Order extends Model {
     return this.belongsTo('App/Models/Product')
   }
 
-  users() {
-    return this.belongsToMany('App/Models/User').pivotTable('deliveries')
+  deliveries() {
+    return this.hasMany('App/Models/Delivery')
   }
 }
 

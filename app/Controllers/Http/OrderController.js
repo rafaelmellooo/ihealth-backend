@@ -8,17 +8,26 @@ class OrderController {
     response
   }) {
     const user = await auth.getUser()
+    const {
+      user_id
+    } = params
 
-    console.log(user)
-
-    if (Number(params.user_id) !== user.id) {
+    if (Number(user_id) !== user.id) {
       return response.status(401).json({
         error: 'Permission Denied'
       })
     }
 
     const orders = await Order
-      .query().where('user_id', params.user_id).with('product').fetch()
+      .query()
+      .leftJoin('deliveries', 'orders.id', 'deliveries.order_id')
+      .where('orders.user_id', user_id)
+      .andWhere(builder => {
+        builder.where('deliveries.is_accepted', false)
+        builder.orWhereNull('deliveries.is_accepted')
+      })
+      .with('product')
+      .fetch()
 
     return orders
   }
@@ -26,13 +35,19 @@ class OrderController {
   async store({
     auth,
     params,
-    response
+    response,
+    request
   }) {
     const user = await auth.getUser()
 
+    const {
+      quantity
+    } = request.only(['quantity'])
+
     const order = await Order.create({
       user_id: user.id,
-      product_id: params.product_id
+      product_id: params.product_id,
+      quantity
     })
 
     return response.status(201).json(order)

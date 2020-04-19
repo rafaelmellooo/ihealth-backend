@@ -39,8 +39,8 @@ class User extends Model {
     return this.hasMany('App/Models/Product')
   }
 
-  orders() {
-    return this.belongsToMany('App/Models/Order').pivotTable('deliveries')
+  deliveries() {
+    return this.hasMany('App/Models/Delivery')
   }
 
   static get hidden() {

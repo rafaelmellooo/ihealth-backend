@@ -1,3 +1,4 @@
+const User = use('App/Models/User')
 class SessionController {
   async store({
     auth,
@@ -12,8 +13,15 @@ class SessionController {
       token
     } = await auth.attempt(email, password)
 
+    const {
+      type_id,
+      name
+    } = await User.findBy('email', email)
+
     return {
-      token
+      token,
+      type_id,
+      name
     };
   }
 }

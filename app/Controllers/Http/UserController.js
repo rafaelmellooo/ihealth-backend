@@ -3,12 +3,14 @@ const User = use('App/Models/User')
 
 class UserController {
 
-  async index({
-    request
-  }) {
-    const users = await User.all();
+  async index() {
+    const users = await User
+      .query()
+      .where('type_id', 3)
+      .andWhere('is_available', true)
+      .fetch();
 
-    return users; 
+    return users;
   }
 
   async store({
