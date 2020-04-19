@@ -16,6 +16,21 @@
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
 const Route = use('Route')
 
+Route.get('/users', 'UserController.index')
 Route.post('/users', 'UserController.store')
 
 Route.post('/sessions', 'SessionController.store')
+
+Route.group(() => {
+  Route.get('/products', 'ProductController.index')
+  Route.get('/products/:id', 'ProductController.show')
+  Route.post('/products', 'ProductController.store')
+
+  Route.get('/users/:user_id/orders', 'OrderController.index')
+  Route.post('/products/:product_id/orders', 'OrderController.store')
+
+  Route.post('/deliveires/', 'DeliveryController.store')
+}).middleware('auth')
+
+Route.get('/user_types', 'UserTypeController.index')
+Route.get('/product_types', 'ProductTypeController.index')
